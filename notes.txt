@@ -1,18 +1,54 @@
 Commands
 
 ghci is REPL
-    ^Z or :quit to exit
+    ^D or :quit to exit
+    use let to define stuff
 ghc is compiler
 runhaskell to run script
     aliased to rh on my shell
 
     
 Syntax
-
-Invoking: func arg1 arg2
-Infix:   arg1 `func` arg2
-Range: 
-    [1..50]
-    [0,5..25]
-    [1..]
+    Types Captilized, variabes lowercase initial
+Invoking: 
+    > func arg1 arg2
+Infix:   
+    > arg1 `func` arg2
+Types & Literals:
+    Num: 1
+    Fractional: 1.1
+    [Char]: "hello"    Strings are justr lists of Char
+        C style escaping: "hello\nworld"
+    Char: 'h'
+    Bool: False
+Operators: 1 + 3
+  infix by default, but can be prefix:
+  > (+) 1 3
+  Q: what makes a function an operator?  is it the symbol?
+Booleans:
+    > True
+    > False
+    > True && True == True
+    > 1 + 2 == 3
+    True
     
+    Not equals operator is /=
+List:
+    Empty:
+    []
+    must all be same type: [1,2,3]
+List operators:
+    (++)  is concatenate:
+        > [3,1,2] ++ [1,2,3]
+        [3,1,2,1,2,3]
+    (:) is construct.  prepends item to head of lists
+        > 1 : [2,3]
+        [1,2,3]
+Enumeration (like a range): 
+    > [1..50]
+    > [0,5..25]
+    > [1..]
+
+IO:
+    putStr
+    putStrLn 
