@@ -15,11 +15,27 @@ runhaskell to run script
 
     
 Syntax
-    Types Captilized, variabes lowercase initial
+    Functions and variables, incl type variables start with a lower case
+    Types start with an uppercase
+    This isn't just convention!
+    
+    Whitespace is significant:
+        spaces seperate
+        new lines terminate
+        blocks are indented
 Invoking: 
     > func arg1 arg2
 Infix:   
     > arg1 `func` arg2
+$:
+    allow you to skip parens. Everything after the $ is the last arg to the function
+        > print $ 1 + 2
+    is the same as
+        > print (1+2)
+    and
+        > map (+1) (map fibonacci [1..20])
+   could be:
+        > map (+1) $ map fibonacci [1..20]
 Types & Literals:
     Num: 1
     Fractional: 1.1
@@ -60,6 +76,10 @@ Enumeration (like a range):
     > [1..50]
     > [0,5..25]
     > [1..]
+Tuples:
+    fixed size
+    > (1, "alistair cooke", "12 leafield close")
+    
 
 IO:
     putStr
