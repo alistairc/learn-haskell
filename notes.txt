@@ -1,8 +1,14 @@
+Book
+http://book.realworldhaskell.org/read
+
 Commands
 
 ghci is REPL
     ^D or :quit to exit
-    use let to define stuff
+    use 'let' to define stuff
+    implicit 'it' variable 
+    can use :set +t to print more type info after each command
+    :info x to get type info about a symbol
 ghc is compiler
 runhaskell to run script
     aliased to rh on my shell
@@ -44,6 +50,12 @@ List operators:
     (:) is construct.  prepends item to head of lists
         > 1 : [2,3]
         [1,2,3]
+    head gets first item
+        > head [1,2,3]
+        1
+    tail gets all the rest
+        > tail [1,2,3]
+        [2,3]
 Enumeration (like a range): 
     > [1..50]
     > [0,5..25]
@@ -52,3 +64,13 @@ Enumeration (like a range):
 IO:
     putStr
     putStrLn 
+    getLine
+    <- operator.  bind
+        line <- getLine
+        line is bound to the output of getLine
+    do blocks:
+        main = do
+            putStr "Hello "
+            putStrLn "World"
+            
+            
