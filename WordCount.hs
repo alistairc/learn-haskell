@@ -1,3 +1,5 @@
+module WordCount where
+
 import Data.List
 import Data.Char
 
