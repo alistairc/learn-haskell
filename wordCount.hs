@@ -1,26 +1,28 @@
 import Data.List
 import Data.Char
 
-wordChars = ['a'..'z'] ++ ['A'..'Z'] ++ ['-','\'']
-
-wordFilter c = elem c wordChars
+toLowerString :: String -> String
+toLowerString s = map toLower s
  
-tokenize :: [Char] -> [[Char]]
-tokenize text = map (filter wordFilter) $ 
-    words $ 
-    map toLower text 
+tokenize :: String -> [String]
+tokenize text = 
+    (words . toLowerString . wordCharsOnly) text
+    where 
+        wordCharsOnly s = filter wordFilter s
+        wordFilter c = elem c wordChars
+        wordChars = ['a'..'z'] ++ ['A'..'Z'] ++ ['-','\''] ++ [' ','\n','\t']
 
-count :: [[Char]] -> [([Char],Int)]
-count list = do
-    let sorted = sortBy compare list
-    let groups = groupBy (==) sorted
-    let groupTotal grp = (head grp, length grp)
-    map groupTotal groups
+count :: [String] -> [(String,Int)]
+count list = map countGroup $ (group . sort) list
+    where
+        sort = sortBy compare
+        group = groupBy (==)
+        countGroup grp = (head grp, length grp)
 
-wordCount :: [Char] -> [([Char],Int)]
-wordCount text = count $ tokenize text
+wordCount :: String -> [(String,Int)]
+wordCount text = (count . tokenize) text
 
-main = print $ wordCount "This is some plain text.  This program will count the \
+main = print $ wordCount "This is some plain text.\nThis program will count the \
    \number of occurrences of each word and write to the console"
 
     
