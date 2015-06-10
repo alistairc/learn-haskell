@@ -34,6 +34,16 @@ intersperse _ [] = []
 intersperse _ [single] = single
 intersperse separator (item:rest) = item ++ [separator] ++ (intersperse separator rest)
 
+
+
+data Tree = 
+    Node { left :: Tree, right :: Tree } 
+    | Empty
+    
+height :: Tree -> Int
+height Empty = 0
+height (Node left right) = 1 + max (height left) (height right)
+
 main = hspec $ do
     describe "myLength" $ do
         it "should behave the same as the built in function" $ do
@@ -78,6 +88,24 @@ main = hspec $ do
             intersperse ',' [] `shouldBe` ""
             intersperse ',' ["foo"] `shouldBe` "foo"
             intersperse ',' ["foo","bar","baz","quux"] `shouldBe` "foo,bar,baz,quux"
+    
+    describe "height" $ do
+        it "should return the height of symmetrical trees" $ do
+            height Empty `shouldBe` 0
+            height Node { left = Empty, right = Empty } `shouldBe` 1
+            height Node { 
+                left = Node { left = Empty, right = Empty }, 
+                right = Node { left = Empty, right = Empty }
+            }  `shouldBe` 2
+        it "should return the longest height of asymmetrical trees" $ do
+            height Node { 
+                left = Node { 
+                    left = Empty,
+                    right = Node { left = Empty, right = Empty }
+                },
+                right = Node { left = Empty, right = Empty }
+            } `shouldBe` 3
+            
             
     where
         empty = ([]::[()])  -- "shouldBe" needs a type deriving Show, Eq; so just [] won't do
