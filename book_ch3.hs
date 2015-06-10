@@ -1,5 +1,5 @@
 import Test.Hspec
-import Data.List
+import Data.List (sortBy)
 
 myLength :: [a] -> Int
 myLength [] = 0
@@ -28,6 +28,11 @@ palindrome x
 lengthSort :: [[a]] -> [[a]]
 lengthSort x = sortBy lengthCompare x
     where lengthCompare a b = compare (length a) (length b)
+    
+intersperse :: a -> [[a]] -> [a]
+intersperse _ [] = []
+intersperse _ [single] = single
+intersperse separator (item:rest) = item ++ [separator] ++ (intersperse separator rest)
 
 main = hspec $ do
     describe "myLength" $ do
@@ -67,6 +72,12 @@ main = hspec $ do
             lengthSort [[1],[2]] `shouldBe` [[1],[2]]
             lengthSort [[1,2],[3,4,5],[6]] `shouldBe` [[6],[1,2],[3,4,5]]
             lengthSort ["first","second","third"] `shouldBe` ["first","third","second"]
+            
+    describe "intersperse" $ do
+        it "should add a separator between elements" $ do
+            intersperse ',' [] `shouldBe` ""
+            intersperse ',' ["foo"] `shouldBe` "foo"
+            intersperse ',' ["foo","bar","baz","quux"] `shouldBe` "foo,bar,baz,quux"
             
     where
         empty = ([]::[()])  -- "shouldBe" needs a type deriving Show, Eq; so just [] won't do
