@@ -4,6 +4,9 @@ module Spread (
     lowestSpread, 
     lowestSpreadInFile) where
 
+import qualified Data.ByteString.Lazy as B
+import qualified Data.Text.Lazy as T
+import qualified Data.Text.Lazy.Encoding as T
 import Data.List -- (sortBy)
 import System.IO -- (hGetContents, hClose, openFile, IOMode(..))
 import Data.Maybe -- (isNothing, isJust, fromJust)
@@ -35,15 +38,15 @@ toWeather (first:second:third:_)
         clean = filter ((/=) '*')
 toWeather _ = Nothing
     
-readWeather :: String -> [Weather]
+readWeather :: T.Text -> [Weather]
 readWeather content =
-    map fromJust (filter isJust (map (toWeather . words) (lines content)))
+    map fromJust (filter isJust (map (toWeather . words . T.unpack) (T.lines content)))
     
-lowestSpreadInFile :: String -> Maybe Int
+lowestSpreadInFile :: T.Text -> Maybe Int
 lowestSpreadInFile = (lowestSpread . readWeather)
 
 main = do
     file <- openFile "./weather.dat" ReadMode
-    content <- hGetContents file
-    print (lowestSpreadInFile content)
+    content <- B.hGetContents file
+    print (lowestSpreadInFile (T.decodeUtf8 content))
     hClose file
