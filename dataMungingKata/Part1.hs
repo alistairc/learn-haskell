@@ -1,4 +1,4 @@
-module Spread (
+module Part1 (
     Weather (..), 
     readWeather, 
     lowestSpread, 

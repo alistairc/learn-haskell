@@ -1,4 +1,4 @@
-import Spread
+import Part1
 import Test.Hspec
 import Data.List
 import qualified Data.Text.Lazy as T
