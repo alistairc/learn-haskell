@@ -5,6 +5,7 @@ module Part2 (
         lowestGoalDifferenceInFile
     ) where
 
+import Common
 import qualified Data.Text.Lazy as T
 import qualified Data.ByteString.Lazy as B
 import qualified Data.Text.Lazy.Encoding as T
@@ -24,9 +25,7 @@ data Score = Score {
 goalDifference x = goalsFor x - goalsAgainst x
 
 lowestGoalDifference :: [Score] -> Maybe String
-lowestGoalDifference [] = Nothing
-lowestGoalDifference scores = Just $ teamName (head (sortBy diff scores))
-    where diff x y = compare (goalDifference x) (goalDifference y)
+lowestGoalDifference scores = maybeSelect teamName (lowest goalDifference scores)
 
 toScore :: [String] -> Maybe Score
 toScore (posCol:teamCol:_:_:_:_:forCol:_:againstCol:_)
@@ -41,11 +40,10 @@ toScore (posCol:teamCol:_:_:_:_:forCol:_:againstCol:_)
 toScore _ = Nothing
     
 readScores :: T.Text -> [Score]
-readScores content =
-    map fromJust (filter isJust (map (toScore . words . T.unpack) (T.lines content)))
+readScores = readWordDelimitedText toScore
     
 lowestGoalDifferenceInFile :: T.Text -> Maybe String
-lowestGoalDifferenceInFile = (lowestGoalDifference . readScores)
+lowestGoalDifferenceInFile = processFile lowestGoalDifference readScores
 
 main = do
     file <- openFile "./football.dat" ReadMode

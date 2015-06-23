@@ -4,6 +4,7 @@ module Part1 (
     lowestSpread, 
     lowestSpreadInFile) where
 
+import Common
 import qualified Data.ByteString.Lazy as B
 import qualified Data.Text.Lazy as T
 import qualified Data.Text.Lazy.Encoding as T
@@ -21,9 +22,7 @@ data Weather = Weather {
 spread x = maxTemp x - minTemp x
 
 lowestSpread :: [Weather] -> Maybe Int
-lowestSpread [] = Nothing
-lowestSpread weathers = Just $ dayNum (head (sortBy spreadDiff weathers))
-    where spreadDiff x y = compare (spread x) (spread y)
+lowestSpread weathers = maybeSelect dayNum (lowest spread weathers)
     
 toWeather :: [String] -> Maybe Weather
 toWeather (first:second:third:_) 
@@ -39,11 +38,9 @@ toWeather (first:second:third:_)
 toWeather _ = Nothing
     
 readWeather :: T.Text -> [Weather]
-readWeather content =
-    map fromJust (filter isJust (map (toWeather . words . T.unpack) (T.lines content)))
+readWeather = readWordDelimitedText toWeather
     
-lowestSpreadInFile :: T.Text -> Maybe Int
-lowestSpreadInFile = (lowestSpread . readWeather)
+lowestSpreadInFile = processFile lowestSpread readWeather
 
 main = do
     file <- openFile "./weather.dat" ReadMode
